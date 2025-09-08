@@ -1,0 +1,35 @@
+name: ntfy
+
+services:
+  ntfy:
+    image: binwiederhier/ntfy:v${NTFY_VERSION}
+    container_name: ntfy
+    volumes:
+      - /etc/timezone:/etc/timezone
+      - ntfy-cache:/var/cache/ntfy
+      - ntfy-config:/etc/ntfy:/etc/ntfy
+    environment:
+      - NTFY_BASE_URL
+      - NTFY_BEHIND_PROXY=true
+      - NTFY_CACHE_FILE=/var/cache/ntfy/cache.db
+      - NTFY_AUTH_FILE
+      - NTFY_AUTH_USERS
+      - NTFY_AUTH_DEFAULT_ACCESS=deny-all
+      - NTFY_AUTH_ACCESS
+      - NTFY_ENABLE_LOGIN=true
+    ports:
+      - "127.0.0.1:8082:80"
+    networks:
+      - nginx-proxy-manager_frontend
+    command:
+      - serve
+    restart: unless-stopped
+
+networks:
+  nginx-proxy-manager_frontend:
+    driver: bridge
+    external: true
+
+volumes:
+  ntfy-cache:
+  ntfy-config:
