@@ -5,7 +5,7 @@ services:
     image: binwiederhier/ntfy:v${NTFY_VERSION}
     container_name: ntfy
     volumes:
-      - /etc/timezone:/etc/timezone
+      - /etc/timezone:/etc/timezone:ro
       - ntfy-cache:/var/cache/ntfy
       - ntfy-config:/etc/ntfy:/etc/ntfy
     environment:
@@ -24,6 +24,8 @@ services:
     command:
       - serve
     restart: unless-stopped
+    labels:
+      - wud.tag.include=^v\d+\.\d+\.\d+$$
 
 networks:
   nginx-proxy-manager_frontend:
