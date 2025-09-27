@@ -20,14 +20,19 @@ services:
     ports:
       - "127.0.0.1:8082:80"
     networks:
+      - backend
       - nginx-proxy-manager_frontend
     command:
       - serve
     restart: unless-stopped
     labels:
       - wud.tag.include=^v\d+\.\d+\.\d+$$
+      - traefik.enable=true
 
 networks:
+  backend:
+    external: true
+    driver: bridge
   nginx-proxy-manager_frontend:
     driver: bridge
     external: true
